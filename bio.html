@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chihiro504 | MCPE Dev · UI JSON</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a0a;
+      font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      color: #e0e0e0;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .bg-animation {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 30% 40%, #1f0a0a 0%, #030303 90%);
+    }
+
+    .particles {
+      position: absolute;
+      width: 100%; height: 100%;
+      background: repeating-linear-gradient(45deg, rgba(255,50,50,0.03) 0px, rgba(255,50,50,0.03) 2px, transparent 2px, transparent 10px),
+                  repeating-linear-gradient(-45deg, rgba(255,255,255,0.01) 0px, rgba(255,255,255,0.01) 1px, transparent 1px, transparent 20px);
+      animation: slowDrift 20s infinite alternate ease-in-out;
+    }
+
+    @keyframes slowDrift {
+      0% { transform: translate(0,0) rotate(0deg); }
+      100% { transform: translate(-15px,10px) rotate(1deg); }
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(75px);
+      opacity: 0.2;
+      z-index: 0;
+      animation: floatOrb 18s infinite alternate;
+    }
+    .orb1 { width: 400px; height: 400px; background: #b30000; top: -100px; right: -100px; }
+    .orb2 { width: 350px; height: 350px; background: #ffffff; bottom: -120px; left: -80px; opacity: 0.07; animation-duration: 22s; }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0,0) scale(1); }
+      100% { transform: translate(40px,-30px) scale(1.2); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 750px;
+      background: rgba(10,10,10,0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 2.5rem;
+      box-shadow: 0 25px 50px -8px rgba(0,0,0,0.8), 0 0 0 1px rgba(220,20,20,0.3);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      animation: fadeInUp 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(35px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255,70,70,0.4);
+      padding-bottom: 1.2rem;
+    }
+
+    .name-section h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff 0%, #ff9f9f 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: 0.3s;
+    }
+    .name-section h1:hover {
+      filter: drop-shadow(0 0 15px #ff4444);
+    }
+
+    .dev-badge {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+      color: #ffaaaa;
+      font-weight: 500;
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.05);
+      padding: 0.25rem 1rem;
+      border-radius: 30px;
+      border: 1px solid rgba(255,80,80,0.6);
+    }
+
+    .music-toggle {
+      background: rgba(20,20,20,0.8);
+      border: 1px solid #ff4d4d;
+      color: #fff0f0;
+      padding: 0.5rem 1rem;
+      border-radius: 3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 500;
+      transition: 0.25s;
+      font-size: 0.9rem;
+      backdrop-filter: blur(8px);
+    }
+    .music-toggle:hover {
+      background: #2a0a0a;
+      border-color: #ffffff;
+      box-shadow: 0 0 20px #ff3a3a;
+      transform: scale(1.02);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: 1px solid rgba(255,80,80,0.45);
+      color: #ccc;
+      padding: 0.7rem 1.5rem;
+      border-radius: 3rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(0,0,0,0.4);
+    }
+    .tab-btn.active {
+      background: #cc2222;
+      border-color: #ffffff;
+      color: white;
+      box-shadow: 0 0 25px #ff3a3a;
+    }
+    .tab-btn:hover:not(.active) {
+      background: rgba(255,255,255,0.05);
+      border-color: #ffffff;
+      color: #fff;
+    }
+
+    .panels {
+      background: rgba(0,0,0,0.35);
+      border-radius: 1.8rem;
+      padding: 1.5rem;
+      border: 1px solid rgba(255,50,50,0.25);
+      min-height: 200px;
+    }
+
+    .panel { display: none; animation: fadePanel 0.4s ease; }
+    .panel.active-panel { display: block; }
+
+    @keyframes fadePanel {
+      from { opacity: 0.2; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .bio-text {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #ddd;
+      background: rgba(255,255,255,0.02);
+      padding: 0.8rem 1rem;
+      border-radius: 1.2rem;
+      border-left: 4px solid #ff3a3a;
+      white-space: pre-line;
+      margin-bottom: 1.2rem;
+    }
+
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      margin: 0.5rem 0;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #181818;
+      border: 1px solid #444;
+      padding: 0.65rem 1.4rem;
+      border-radius: 2.5rem;
+      color: #f0f0f0;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.25s;
+    }
+    .social-link.discord { border-color: #5865F2; }
+    .social-link.youtube { border-color: #FF0000; }
+    .social-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(255,0,0,0.4);
+      background: #1f1a1a;
+      color: white;
+      border-color: white;
+    }
+
+    .pack-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .pack-item {
+      background: rgba(20,20,20,0.7);
+      border: 1px solid #ff444488;
+      border-radius: 1.5rem;
+      padding: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      transition: 0.2s;
+    }
+    .pack-item:hover {
+      border-color: #ffffff;
+      box-shadow: 0 0 22px #b30000;
+      transform: translateX(4px);
+    }
+
+    .pack-info h4 {
+      font-size: 1.1rem;
+      color: #ffb3b3;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .pack-info span {
+      font-size: 0.8rem;
+      color: #999;
+      margin-left: 0.3rem;
+    }
+    .pack-info small {
+      display: block;
+      color: #777;
+      font-size: 0.75rem;
+      margin-top: 2px;
+    }
+
+    .download-btn {
+      background: #cc0000;
+      color: white;
+      padding: 0.5rem 1.2rem;
+      border-radius: 3rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      text-decoration: none;
+    }
+    .download-btn:hover {
+      background: #ff1a1a;
+      border-color: white;
+      box-shadow: 0 0 20px red;
+      transform: scale(1.05);
+    }
+
+    audio { display: none; }
+
+    @media (max-width: 550px) {
+      .container { padding: 1.5rem; }
+      .name-section h1 { font-size: 2rem; }
+      .pack-item { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation"><div class="particles"></div></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <audio id="bg-music" loop preload="auto">
+    <source src="https://cdn.freesound.org/previews/612/612095_11861866-lq.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="name-section">
+        <h1>Chihiro504</h1>
+        <div class="dev-badge"><i class="fas fa-code"></i> MCPE · UI JSON</div>
+      </div>
+      <button class="music-toggle" id="musicToggle">
+        <i class="fas fa-music"></i> <span>♪ Play</span>
+      </button>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="about"><i class="fas fa-user-circle"></i> About Me</button>
+      <button class="tab-btn" data-tab="resource"><i class="fas fa-cube"></i> Resources Pack</button>
+      <button class="tab-btn" data-tab="behavior"><i class="fas fa-cogs"></i> Behavior Pack</button>
+    </div>
+
+    <!-- ============ PANELS ============ -->
+    <div class="panels">
+      <!-- ABOUT ME -->
+      <div class="panel active-panel" id="about-panel">
+        <div class="bio-text">
+✦ MCPE UI/UX modder & resource pack creator.
+✦ JSON tinkerer · Redstone whisperer.
+✦ Crafting interfaces that feel native.
+✦ Specializing in UI JSON for Bedrock Edition.
+        </div>
+        <div class="social-links">
+          <a href="https://discord.gg/f9632Ntx" target="_blank" class="social-link discord">
+            <i class="fab fa-discord"></i> Discord
+          </a>
+          <a href="https://youtube.com/@chihiro504?si=KDzlU0iY4aFkPgoa" target="_blank" class="social-link youtube">
+            <i class="fab fa-youtube"></i> YouTube
+          </a>
+        </div>
+      </div>
+
+      <!-- ==================== RESOURCES PACK ==================== -->
+      <div class="panel" id="resource-panel">
+        <div class="pack-grid">
+
+          <!-- MẪU: Copy paste block này để thêm file mới -->
+          <div class="pack-item">
+            <div class="pack-info">
+              <h4><i class="fas fa-paint-brush"></i> Chihiro UI Redux</h4>
+              <span>v2.1</span>
+              <small>.mcpack • 2.4 MB</small>
+            </div>
+            <!-- THAY LINK GITHUB RELEASES CỦA BẠN VÀO ĐÂY -->
+            <a href="https://github.com/Chihiro504/Chihiro504/releases/download/v1.0/Chihiro_UI_Redux.mcpack" 
+               class="download-btn" target="_blank" download>
+              <i class="fas fa-download"></i> Download
+            </a>
+          </div>
+          <!-- HẾT MẪU -->
+
+          <div class="pack-item">
+            <div class="pack-info">
+              <h4><i class="fas fa-font"></i> Clean Font JSON</h4>
+              <span>v1.0</span>
+              <small>.zip • 856 KB</small>
+            </div>
+            <a href="https://github.com/Chihiro504/Chihiro504/releases/download/v1.0/Clean_Font_JSON.zip" 
+               class="download-btn" target="_blank" download>
+              <i class="fas fa-download"></i> Download
+            </a>
+          </div>
+
+          <div class="pack-item">
+            <div class="pack-info">
+              <h4><i class="fas fa-file-pdf"></i> UI JSON Guide</h4>
+              <span>v1.2</span>
+              <small>.pdf • 1.1 MB</small>
+            </div>
+            <a href="https://github.com/Chihiro504/Chihiro504/releases/download/v1.0/UI_JSON_Guide.pdf" 
+               class="download-btn" target="_blank" download>
+              <i class="fas fa-download"></i> Download
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ==================== BEHAVIOR PACK ==================== -->
+      <div class="panel" id="behavior-panel">
+        <div class="pack-grid">
+
+          <div class="pack-item">
+            <div class="pack-info">
+              <h4><i class="fas fa-brain"></i> Custom Mob AI</h4>
+              <span>v0.9-beta</span>
+              <small>.mcaddon • 3.2 MB</small>
+            </div>
+            <a href="https://github.com/Chihiro504/Chihiro504/releases/download/v1.0/Custom_Mob_AI.mcaddon" 
+               class="download-btn" target="_blank" download>
+              <i class="fas fa-download"></i> Download
+            </a>
+          </div>
+
+          <div class="pack-item">
+            <div class="pack-info">
+              <h4><i class="fas fa-cog"></i> Advanced Commands</h4>
+              <span>v1.0</span>
+              <small>.zip • 420 KB</small>
+            </div>
+            <a href="https://github.com/Chihiro504/Chihiro504/releases/download/v1.0/Advanced_Commands.zip" 
+               class="download-btn" target="_blank" download>
+              <i class="fas fa-download"></i> Download
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script>
+    // ── Music Control ──
+    const music = document.getElementById('bg-music');
+    const musicToggle = document.getElementById('musicToggle');
+    let musicPlaying = false;
+    music.volume = 0.25;
+
+    musicToggle.addEventListener('click', () => {
+      if (musicPlaying) {
+        music.pause();
+        musicToggle.innerHTML = '<i class="fas fa-music"></i> <span>♪ Play</span>';
+      } else {
+        music.play().catch(() => {});
+        musicToggle.innerHTML = '<i class="fas fa-volume-up"></i> <span>♫ Ambient</span>';
+      }
+      musicPlaying = !musicPlaying;
+    });
+
+    document.body.addEventListener('click', function initPlay() {
+      if (!musicPlaying) {
+        music.play().then(() => {
+          musicPlaying = true;
+          musicToggle.innerHTML = '<i class="fas fa-volume-up"></i> <span>♫ Ambient</span>';
+        }).catch(() => {});
+      }
+    }, { once: true });
+
+    // ── Tabs ──
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active-panel'));
+        const tab = this.getAttribute('data-tab');
+        document.getElementById(tab + '-panel').classList.add('active-panel');
+      });
+    });
+  </script>
+</body>
+</html>
